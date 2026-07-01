@@ -83,31 +83,31 @@ function feedbackHtml(data, heading = 'New Client Feedback') {
   ];
 
   const rowHtml = rows.map(([label, value]) => `
-    <tr>
-      <td style="padding:12px 14px;border-bottom:1px solid #ece7de;color:#6b665f;font-size:13px;text-transform:uppercase;letter-spacing:.08em;">${escapeHtml(label)}</td>
-      <td style="padding:12px 14px;border-bottom:1px solid #ece7de;color:#111827;font-size:15px;">${escapeHtml(clean(value))}</td>
-    </tr>
+    <div style="padding:14px 0;border-bottom:1px solid #2a2a2a;">
+      <div style="margin:0 0 6px;color:#ff4f8b;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;line-height:1.35;">${escapeHtml(label)}</div>
+      <div style="margin:0;color:#fff6e8;font-size:16px;line-height:1.5;word-break:break-word;overflow-wrap:anywhere;">${escapeHtml(clean(value))}</div>
+    </div>
   `).join('');
 
   const paragraph = (label, value) => `
-    <div style="margin-top:22px;">
-      <p style="margin:0 0 8px;color:#6b665f;font-size:12px;text-transform:uppercase;letter-spacing:.12em;">${escapeHtml(label)}</p>
-      <div style="white-space:pre-wrap;background:#fff8ef;border:1px solid #ece7de;border-radius:10px;padding:14px;color:#111827;line-height:1.6;">${escapeHtml(clean(value))}</div>
+    <div style="margin-top:20px;">
+      <p style="margin:0 0 8px;color:#ff4f8b;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;line-height:1.35;">${escapeHtml(label)}</p>
+      <div style="white-space:pre-wrap;background:#151515;border:1px solid #2a2a2a;border-radius:8px;padding:14px;color:#fff6e8;font-size:15px;line-height:1.6;word-break:break-word;overflow-wrap:anywhere;">${escapeHtml(clean(value))}</div>
     </div>
   `;
 
   return `
-    <div style="margin:0;padding:28px;background:#f7efe4;font-family:Inter,Arial,sans-serif;color:#111827;">
-      <div style="max-width:720px;margin:0 auto;background:#ffffff;border:1px solid #ece7de;border-radius:14px;overflow:hidden;">
-        <div style="padding:28px;background:#07080c;color:#fff6e8;">
-          <p style="margin:0 0 8px;color:#63e6be;font-size:12px;text-transform:uppercase;letter-spacing:.18em;">Shaurya Sharma</p>
-          <h1 style="margin:0;font-family:Georgia,serif;font-size:34px;font-weight:400;">${escapeHtml(heading)}</h1>
-          <p style="margin:10px 0 0;color:rgba(255,246,232,.72);">Web Design, Full Stack, AI and Video Making feedback response.</p>
+    <div style="margin:0;padding:0;background:#ff4f8b;font-family:Arial,Helvetica,sans-serif;color:#fff6e8;width:100%;">
+      <div style="width:100%;max-width:560px;margin:0 auto;background:#050505;border:0;box-sizing:border-box;">
+        <div style="padding:24px 18px 22px;background:#050505;color:#fff6e8;border-bottom:1px solid #2a2a2a;box-sizing:border-box;">
+          <p style="margin:0 0 8px;color:#ff4f8b;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.16em;line-height:1.4;">Shaurya Sharma</p>
+          <h1 style="margin:0;font-family:Georgia,serif;font-size:32px;line-height:1.08;font-weight:400;color:#fff6e8;">${escapeHtml(heading)}</h1>
+          <p style="margin:12px 0 0;color:#d8d0c5;font-size:14px;line-height:1.5;">Web Design, Full Stack, AI, Video Making, WhatsApp Catalog and Email Marketing feedback response.</p>
         </div>
-        <div style="padding:22px;">
-          <table style="width:100%;border-collapse:collapse;border:1px solid #ece7de;border-radius:10px;overflow:hidden;">
+        <div style="padding:18px;box-sizing:border-box;">
+          <div style="border-top:1px solid #2a2a2a;">
             ${rowHtml}
-          </table>
+          </div>
           ${paragraph('What they liked most', data.liked)}
           ${paragraph('What could be improved', data.improve)}
           ${paragraph('Other thoughts', data.other)}
