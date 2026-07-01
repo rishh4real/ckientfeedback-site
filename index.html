@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Share Your Experience — Shaurya Sharma</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --coral: #ff5f7e;
+      --aqua: #63e6be;
+      --gold: #ffd166;
+      --ink: #07080c;
+      --panel: rgba(14, 16, 24, 0.78);
+      --panel-strong: rgba(21, 24, 35, 0.92);
+      --paper: #fff6e8;
+      --soft: rgba(255, 246, 232, 0.72);
+      --muted: rgba(255, 246, 232, 0.48);
+      --line: rgba(255, 246, 232, 0.12);
+      --danger: #ff6b6b;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background:
+        linear-gradient(120deg, rgba(99, 230, 190, 0.09), transparent 26%),
+        linear-gradient(240deg, rgba(255, 95, 126, 0.12), transparent 32%),
+        var(--ink);
+      color: var(--paper);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      background-image:
+        linear-gradient(rgba(255, 246, 232, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 246, 232, 0.045) 1px, transparent 1px);
+      background-size: 54px 54px;
+      mask-image: linear-gradient(to bottom, black, transparent 82%);
+      animation: grid-drift 22s linear infinite;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      inset: -20% -10%;
+      z-index: -2;
+      background:
+        conic-gradient(from 130deg at 32% 16%, rgba(255, 95, 126, 0.22), transparent 24%, rgba(99, 230, 190, 0.18), transparent 56%, rgba(255, 209, 102, 0.14), transparent 82%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 36%);
+      filter: blur(28px);
+      opacity: 0.85;
+      animation: atmosphere 18s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    ::selection {
+      background: var(--aqua);
+      color: var(--ink);
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      padding: 18px 6vw;
+      border-bottom: 1px solid var(--line);
+      background: rgba(7, 8, 12, 0.72);
+      backdrop-filter: blur(18px);
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(22px, 3vw, 30px);
+      color: var(--paper);
+      text-decoration: none;
+      transition: color 0.25s ease, transform 0.25s ease;
+    }
+    .logo:hover {
+      color: var(--aqua);
+      transform: translateY(-1px);
+    }
+    .logo span {
+      font-family: 'Inter', sans-serif;
+      font-style: normal;
+      font-size: 10px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-left: 10px;
+    }
+    .nav-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+    .nav-right,
+    .progress-label {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .progress-pill {
+      width: 118px;
+      height: 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .progress-fill {
+      display: block;
+      width: 8%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--coral), var(--gold), var(--aqua));
+      box-shadow: 0 0 18px rgba(99, 230, 190, 0.45);
+      transition: width 0.35s ease;
+    }
+
+    .hero {
+      padding: clamp(72px, 10vw, 132px) 6vw 72px;
+      min-height: 58vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(105deg, rgba(255, 246, 232, 0.16), transparent 24%, transparent 68%, rgba(99, 230, 190, 0.12)),
+        radial-gradient(ellipse at 16% 88%, rgba(255, 209, 102, 0.18), transparent 42%);
+      transform: translateX(-7%);
+      animation: hero-sheen 8s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      right: 6vw;
+      bottom: -72px;
+      width: min(42vw, 460px);
+      height: min(42vw, 460px);
+      border: 1px solid rgba(255, 246, 232, 0.16);
+      border-radius: 50%;
+      transform: rotate(15deg);
+      box-shadow: inset 0 0 90px rgba(255, 246, 232, 0.04);
+      animation: slow-spin 28s linear infinite;
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 880px;
+      animation: rise-in 0.8s ease both;
+    }
+    .hero-label {
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--aqua);
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(44px, 8vw, 104px);
+      font-weight: 300;
+      color: var(--paper);
+      line-height: 1.05;
+      margin-bottom: 20px;
+      max-width: 900px;
+      text-wrap: balance;
+    }
+    .hero h1 em {
+      color: var(--gold);
+      font-style: italic;
+    }
+    .hero p {
+      font-size: clamp(15px, 1.8vw, 18px);
+      color: var(--soft);
+      max-width: 620px;
+      line-height: 1.6;
+    }
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 34px;
+    }
+    .hero-stats span {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.055);
+      color: var(--soft);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+    }
+
+    .form-section {
+      width: min(100%, 960px);
+      padding: 72px 6vw;
+      position: relative;
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--aqua);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--line), transparent);
+      max-width: 200px;
+    }
+
+    .field-group { margin-bottom: 36px; }
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+    .field { display: flex; flex-direction: column; gap: 8px; position: relative; }
+    .field label {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .field input,
+    .field textarea,
+    .field select {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(255, 246, 232, 0.18);
+      color: var(--paper);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      padding: 14px 0;
+      outline: none;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+      width: 100%;
+      -webkit-appearance: none;
+    }
+    .field select {
+      background-image:
+        linear-gradient(45deg, transparent 50%, var(--aqua) 50%),
+        linear-gradient(135deg, var(--aqua) 50%, transparent 50%);
+      background-position:
+        calc(100% - 16px) 50%,
+        calc(100% - 10px) 50%;
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+      padding-right: 30px;
+    }
+    .field select option { background: #11141f; color: var(--paper); }
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      border-bottom-color: var(--aqua);
+      box-shadow: 0 12px 28px rgba(99, 230, 190, 0.08);
+      transform: translateY(-1px);
+    }
+    .field input.error,
+    .field textarea.error,
+    .field select.error {
+      border-bottom-color: var(--danger);
+      animation: field-shake 0.35s ease;
+    }
+    .field textarea { resize: vertical; min-height: 96px; line-height: 1.6; }
+    .field input::placeholder,
+    .field textarea::placeholder { color: rgba(255, 246, 232, 0.28); }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--line);
+      margin: 52px 0;
+      position: relative;
+    }
+
+    .rating-question {
+      margin-bottom: 36px;
+      position: relative;
+      isolation: isolate;
+    }
+    .rating-question p {
+      font-size: 15px;
+      color: var(--paper);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .rating-options { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .rating-options input[type="radio"] { display: none; }
+    .rating-options label { cursor: pointer; }
+    .dot {
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255, 246, 232, 0.16);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      transition: all 0.25s ease;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.035);
+    }
+    .rating-options input[type="radio"]:checked + .dot {
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--coral), var(--gold));
+      color: var(--ink);
+      box-shadow: 0 12px 30px rgba(255, 95, 126, 0.28);
+      transform: translateY(-3px) scale(1.04);
+    }
+    .rating-options label:hover .dot {
+      border-color: var(--aqua);
+      color: var(--aqua);
+      transform: translateY(-2px);
+    }
+    .rating-scale {
+      font-size: 11px;
+      color: rgba(255, 246, 232, 0.35);
+      margin-top: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    .yn-options { display: flex; gap: 12px; flex-wrap: wrap; }
+    .yn-options input[type="radio"] { display: none; }
+    .yn-btn {
+      padding: 12px 22px;
+      border: 1px solid rgba(255, 246, 232, 0.16);
+      border-radius: 999px;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: all 0.25s ease;
+      display: block;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.035);
+    }
+    .yn-options input[type="radio"]:checked + .yn-btn {
+      border-color: transparent;
+      background: linear-gradient(135deg, rgba(99, 230, 190, 0.2), rgba(255, 209, 102, 0.16));
+      color: var(--paper);
+      box-shadow: inset 0 0 0 1px rgba(99, 230, 190, 0.28);
+    }
+    .yn-options label:hover .yn-btn {
+      border-color: var(--aqua);
+      color: var(--aqua);
+      transform: translateY(-2px);
+    }
+
+    .submit-row {
+      margin-top: 56px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .submit-btn {
+      position: relative;
+      overflow: hidden;
+      border: 0;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--coral), var(--gold));
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 17px 34px;
+      cursor: pointer;
+      box-shadow: 0 18px 46px rgba(255, 95, 126, 0.26);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.38), transparent);
+      transform: translateX(-110%);
+      transition: transform 0.6s ease;
+    }
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 24px 58px rgba(99, 230, 190, 0.2);
+    }
+    .submit-btn:disabled {
+      cursor: wait;
+      opacity: 0.72;
+      transform: none;
+    }
+    .submit-btn:hover::before { transform: translateX(110%); }
+    .submit-note { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 96px 6vw;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      animation: rise-in 0.6s ease both;
+    }
+    .success-msg h2 {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(42px, 6vw, 72px);
+      font-weight: 300;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .success-msg p { font-size: 16px; color: var(--muted); }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 24px 6vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 80px;
+    }
+    footer p { font-size: 12px; color: rgba(255, 246, 232, 0.34); }
+    footer a { font-size: 12px; color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--aqua); }
+
+    form {
+      position: relative;
+      padding: clamp(28px, 5vw, 48px);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(145deg, var(--panel-strong), rgba(10, 11, 17, 0.76));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(20px);
+      overflow: hidden;
+    }
+    form::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(130deg, rgba(99, 230, 190, 0.4), transparent 24%, rgba(255, 95, 126, 0.34), transparent 70%, rgba(255, 209, 102, 0.32));
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+    form > * {
+      position: relative;
+      z-index: 1;
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Fixed pink and black client theme */
+    body {
+      background: #ff4f8b;
+      background-attachment: fixed;
+      color: #050505;
+    }
+    body::before,
+    body::after,
+    .hero::before,
+    .hero::after,
+    form::before {
+      display: none;
+    }
+    *,
+    *::before,
+    *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+    nav {
+      background: #050505;
+      border-bottom: 2px solid #050505;
+      backdrop-filter: none;
+    }
+    .logo {
+      color: #ff4f8b;
+    }
+    .logo:hover { color: #ff4f8b; transform: none; }
+    .logo span,
+    .nav-right,
+    .progress-label {
+      color: #fff6e8;
+    }
+    .progress-pill {
+      border-color: rgba(255, 246, 232, 0.36);
+      background: rgba(255, 246, 232, 0.18);
+    }
+    .progress-fill {
+      background: #ff4f8b;
+      box-shadow: none;
+    }
+    .hero {
+      background: #ff4f8b;
+      color: #050505;
+      border-bottom: 2px solid #050505;
+    }
+    .hero-content {
+      animation: none;
+    }
+    .hero-label,
+    .section-label {
+      color: #050505;
+      font-weight: 800;
+    }
+    .hero h1,
+    .hero h1 em,
+    .hero p {
+      color: #050505;
+    }
+    .hero h1 {
+      font-weight: 400;
+    }
+    .hero-stats span {
+      border: 1px solid #050505;
+      background: #050505;
+      color: #ff4f8b;
+      backdrop-filter: none;
+    }
+    .form-section {
+      margin: 0 auto;
+    }
+    form,
+    .success-msg {
+      background: #050505;
+      border: 2px solid #050505;
+      box-shadow: 14px 14px 0 rgba(5, 5, 5, 0.22);
+      color: #fff6e8;
+      backdrop-filter: none;
+    }
+    .section-label {
+      color: #ff4f8b;
+    }
+    .section-label::after,
+    .divider {
+      background: none;
+      border-color: rgba(255, 246, 232, 0.2);
+    }
+    .field label,
+    .rating-scale,
+    .submit-note,
+    .success-msg p {
+      color: rgba(255, 246, 232, 0.64);
+    }
+    .field input,
+    .field textarea,
+    .field select {
+      border-bottom-color: rgba(255, 246, 232, 0.28);
+      color: #fff6e8;
+    }
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      border-bottom-color: #ff4f8b;
+      box-shadow: none;
+      transform: none;
+    }
+    .field input::placeholder,
+    .field textarea::placeholder {
+      color: rgba(255, 246, 232, 0.38);
+    }
+    .field select option {
+      background: #050505;
+      color: #fff6e8;
+    }
+    .rating-question p {
+      color: #fff6e8;
+    }
+    .dot {
+      border-color: rgba(255, 246, 232, 0.32);
+      border-radius: 0;
+      background: transparent;
+      color: #fff6e8;
+    }
+    .rating-options input[type="radio"]:checked + .dot {
+      background: #ff4f8b;
+      border-color: #ff4f8b;
+      color: #050505;
+      box-shadow: none;
+      transform: none;
+    }
+    .rating-options label:hover .dot {
+      border-color: #ff4f8b;
+      color: #ff4f8b;
+      transform: none;
+    }
+    .yn-btn {
+      border-color: rgba(255, 246, 232, 0.32);
+      border-radius: 0;
+      background: transparent;
+      color: #fff6e8;
+    }
+    .yn-options input[type="radio"]:checked + .yn-btn {
+      background: #ff4f8b;
+      border-color: #ff4f8b;
+      color: #050505;
+      box-shadow: none;
+    }
+    .yn-options label:hover .yn-btn {
+      border-color: #ff4f8b;
+      color: #ff4f8b;
+      transform: none;
+    }
+    .submit-btn {
+      background: #ff4f8b;
+      border-radius: 0;
+      color: #050505;
+      box-shadow: none;
+    }
+    .submit-btn::before { display: none; }
+    .submit-btn:hover {
+      transform: none;
+      box-shadow: none;
+    }
+    .success-msg h2 {
+      color: #ff4f8b;
+    }
+    footer {
+      background: #050505;
+      border-top: 2px solid #050505;
+    }
+    footer p,
+    footer a {
+      color: #ff4f8b;
+    }
+    footer a:hover { color: #ff4f8b; }
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
+
+    @keyframes atmosphere {
+      0% { transform: translate3d(-2%, -1%, 0) rotate(0deg) scale(1); }
+      100% { transform: translate3d(2%, 1%, 0) rotate(5deg) scale(1.04); }
+    }
+    @keyframes grid-drift {
+      0% { background-position: 0 0, 0 0; }
+      100% { background-position: 54px 54px, 54px 54px; }
+    }
+    @keyframes hero-sheen {
+      0% { opacity: 0.55; transform: translateX(-7%); }
+      100% { opacity: 0.95; transform: translateX(5%); }
+    }
+    @keyframes slow-spin {
+      to { transform: rotate(375deg); }
+    }
+    @keyframes rise-in {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes field-shake {
+      0%, 100% { transform: translateX(0); }
+      35% { transform: translateX(-5px); }
+      70% { transform: translateX(5px); }
+    }
+
+    @media(max-width: 760px) {
+      body::before { background-size: 38px 38px; }
+      nav {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+        padding: 14px 18px;
+      }
+      .nav-meta {
+        width: 100%;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .nav-right { display: none; }
+      .progress-pill {
+        flex: 1;
+        width: auto;
+        min-width: 130px;
+      }
+      .logo span {
+        display: block;
+        margin: 6px 0 0;
+        font-size: 9px;
+        line-height: 1.6;
+      }
+      .field-row { grid-template-columns: 1fr; gap: 28px; }
+      .hero {
+        min-height: auto;
+        padding: 58px 18px 44px;
+      }
+      .hero::after { width: 320px; height: 320px; right: -90px; }
+      .hero h1 {
+        font-size: clamp(42px, 13vw, 58px);
+        line-height: 1.02;
+      }
+      .hero p {
+        font-size: 15px;
+        max-width: 100%;
+      }
+      .hero-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .hero-stats span {
+        text-align: center;
+        padding: 10px 8px;
+        font-size: 10px;
+      }
+      .form-section {
+        padding: 34px 12px 24px;
+        width: 100%;
+      }
+      form {
+        padding: 24px 16px;
+        box-shadow: 0 18px 54px rgba(0, 0, 0, 0.34);
+      }
+      .section-label {
+        gap: 12px;
+        margin-bottom: 28px;
+        letter-spacing: 0.18em;
+      }
+      .field-group,
+      .rating-question { margin-bottom: 30px; }
+      .field input,
+      .field textarea,
+      .field select {
+        font-size: 16px;
+        padding: 15px 0;
+      }
+      .rating-options {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 8px;
+        width: 100%;
+      }
+      .rating-options label { min-width: 0; }
+      .dot {
+        width: 100%;
+        height: 44px;
+        border-radius: 14px;
+      }
+      .yn-btn { width: 100%; text-align: center; }
+      .yn-options label { flex: 1 1 160px; }
+      .submit-row {
+        gap: 18px;
+        margin-top: 40px;
+      }
+      .submit-btn { width: 100%; }
+      .submit-note { width: 100%; }
+      footer {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 44px;
+        padding: 22px 18px;
+      }
+    }
+
+    @media(max-width: 390px) {
+      .hero h1 { font-size: 40px; }
+      .hero-stats { grid-template-columns: 1fr; }
+      .section-label::after { max-width: 80px; }
+      .yn-options label { flex-basis: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="https://portfolio-shaurya28.vercel.app" class="logo">Shaurya <span>Web Design · Full Stack · AI</span></a>
+    <div class="nav-meta">
+      <p class="nav-right">Client Feedback</p>
+      <div class="progress-pill" aria-hidden="true"><span class="progress-fill" id="completionFill"></span></div>
+      <p class="progress-label" id="completionLabel">8%</p>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-content">
+      <p class="hero-label">Feedback Form</p>
+      <h1>How was your<br><em>experience?</em></h1>
+      <p>Takes 2 minutes. Your honest feedback helps me build sharper websites, full-stack products, AI automations, and client experiences after this.</p>
+      <div class="hero-stats" aria-label="Services">
+        <span>Web Design</span>
+        <span>Full Stack</span>
+        <span>AI Automation</span>
+        <span>Video Making</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section" id="formWrapper">
+    <form id="feedbackForm" onsubmit="handleSubmit(event)">
+
+      <!-- ABOUT YOU -->
+      <div class="section-label">About You</div>
+
+      <div class="field-group">
+        <div class="field-row">
+          <div class="field">
+            <label>Your Name *</label>
+            <input type="text" id="name" placeholder="Full name" />
+          </div>
+          <div class="field">
+            <label>Email Address *</label>
+            <input type="email" id="email" placeholder="your@email.com" />
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-row">
+          <div class="field">
+            <label>Phone Number</label>
+            <input type="tel" id="phone" placeholder="+91 00000 00000" />
+          </div>
+          <div class="field">
+            <label>Company / Project Name</label>
+            <input type="text" id="company" placeholder="What we worked on" />
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field">
+          <label>What did I help you with? *</label>
+          <select id="serviceType">
+            <option value="" disabled selected>Select one</option>
+            <option value="Web Design">Web Design</option>
+            <option value="Full Stack Development">Full Stack Development</option>
+            <option value="AI Automation">AI Automation</option>
+            <option value="Video Making">Video Making</option>
+            <option value="Web Design, Full Stack & AI">Web Design, Full Stack & AI</option>
+            <option value="Web Design, AI & Video Making">Web Design, AI & Video Making</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <!-- RATINGS -->
+      <div class="section-label">Rate the Work</div>
+
+      <div class="rating-question">
+        <p>Overall, how satisfied are you with the final result?</p>
+        <div class="rating-options">
+          <label><input type="radio" name="overall" value="1"/><span class="dot">1</span></label>
+          <label><input type="radio" name="overall" value="2"/><span class="dot">2</span></label>
+          <label><input type="radio" name="overall" value="3"/><span class="dot">3</span></label>
+          <label><input type="radio" name="overall" value="4"/><span class="dot">4</span></label>
+          <label><input type="radio" name="overall" value="5"/><span class="dot">5</span></label>
+        </div>
+        <p class="rating-scale">1 = Not satisfied &nbsp;·&nbsp; 5 = Absolutely loved it</p>
+      </div>
+
+      <div class="rating-question">
+        <p>How was the quality of communication throughout the project?</p>
+        <div class="rating-options">
+          <label><input type="radio" name="communication" value="1"/><span class="dot">1</span></label>
+          <label><input type="radio" name="communication" value="2"/><span class="dot">2</span></label>
+          <label><input type="radio" name="communication" value="3"/><span class="dot">3</span></label>
+          <label><input type="radio" name="communication" value="4"/><span class="dot">4</span></label>
+          <label><input type="radio" name="communication" value="5"/><span class="dot">5</span></label>
+        </div>
+      </div>
+
+      <div class="rating-question">
+        <p>Did the work meet your expectations in terms of design quality?</p>
+        <div class="rating-options">
+          <label><input type="radio" name="design" value="1"/><span class="dot">1</span></label>
+          <label><input type="radio" name="design" value="2"/><span class="dot">2</span></label>
+          <label><input type="radio" name="design" value="3"/><span class="dot">3</span></label>
+          <label><input type="radio" name="design" value="4"/><span class="dot">4</span></label>
+          <label><input type="radio" name="design" value="5"/><span class="dot">5</span></label>
+        </div>
+      </div>
+
+      <div class="rating-question">
+        <p>How was the turnaround time and delivery speed?</p>
+        <div class="rating-options">
+          <label><input type="radio" name="speed" value="1"/><span class="dot">1</span></label>
+          <label><input type="radio" name="speed" value="2"/><span class="dot">2</span></label>
+          <label><input type="radio" name="speed" value="3"/><span class="dot">3</span></label>
+          <label><input type="radio" name="speed" value="4"/><span class="dot">4</span></label>
+          <label><input type="radio" name="speed" value="5"/><span class="dot">5</span></label>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <!-- FUTURE -->
+      <div class="section-label">Looking Ahead</div>
+
+      <div class="rating-question">
+        <p>Would you hire me again for future work?</p>
+        <div class="yn-options">
+          <label><input type="radio" name="again" value="Yes, definitely"/><span class="yn-btn">Yes, definitely</span></label>
+          <label><input type="radio" name="again" value="Maybe"/><span class="yn-btn">Maybe</span></label>
+          <label><input type="radio" name="again" value="No"/><span class="yn-btn">No</span></label>
+        </div>
+      </div>
+
+      <div class="rating-question" style="margin-top:32px;">
+        <p>Would you refer me to someone in your network?</p>
+        <div class="yn-options">
+          <label><input type="radio" name="refer" value="Yes, already have"/><span class="yn-btn">Yes, already have</span></label>
+          <label><input type="radio" name="refer" value="Yes, would"/><span class="yn-btn">Yes, would</span></label>
+          <label><input type="radio" name="refer" value="Maybe"/><span class="yn-btn">Maybe</span></label>
+          <label><input type="radio" name="refer" value="No"/><span class="yn-btn">No</span></label>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <!-- OPEN FEEDBACK -->
+      <div class="section-label">In Your Own Words</div>
+
+      <div class="field-group">
+        <div class="field" style="margin-bottom:32px;">
+          <label>What did you like most about working with me?</label>
+          <textarea id="liked" placeholder="What stood out for you..."></textarea>
+        </div>
+        <div class="field" style="margin-bottom:32px;">
+          <label>What could I have done better?</label>
+          <textarea id="improve" placeholder="Honest feedback helps me grow..."></textarea>
+        </div>
+        <div class="field">
+          <label>Any other thoughts or suggestions?</label>
+          <textarea id="other" placeholder="Anything else on your mind..."></textarea>
+        </div>
+      </div>
+
+      <div class="submit-row">
+        <button type="submit" class="submit-btn" id="submitBtn">Submit Feedback -></button>
+        <p class="submit-note" id="submitNote">Goes directly to my inbox.<br>The client also gets a clean copy.</p>
+      </div>
+
+    </form>
+
+    <div class="success-msg" id="successMsg">
+      <h2>Thank you.</h2>
+      <p>Your feedback means a lot.<br>I'll go through it carefully and use it to do better work.</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Shaurya Sharma</p>
+    <a href="mailto:rishh4work@gmail.com">rishh4work@gmail.com</a>
+  </footer>
+
+  <script>
+    const progressFill = document.getElementById('completionFill');
+    const progressLabel = document.getElementById('completionLabel');
+    const form = document.getElementById('feedbackForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const submitNote = document.getElementById('submitNote');
+
+    function updateCompletion() {
+      const checks = [
+        document.getElementById('name').value.trim(),
+        document.getElementById('email').value.trim(),
+        document.getElementById('serviceType').value,
+        document.querySelector('input[name="overall"]:checked'),
+        document.querySelector('input[name="communication"]:checked'),
+        document.querySelector('input[name="design"]:checked'),
+        document.querySelector('input[name="speed"]:checked'),
+        document.querySelector('input[name="again"]:checked'),
+        document.querySelector('input[name="refer"]:checked'),
+        document.getElementById('liked').value.trim(),
+        document.getElementById('improve').value.trim() || document.getElementById('other').value.trim()
+      ];
+      const done = checks.filter(Boolean).length;
+      const percent = Math.max(8, Math.round((done / checks.length) * 100));
+      progressFill.style.width = `${percent}%`;
+      progressLabel.textContent = `${percent}%`;
+    }
+
+    document.querySelectorAll('.section-label, .field-group, .rating-question, .divider, .submit-row').forEach((el) => {
+      el.classList.add('reveal');
+    });
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('in-view');
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
+    form.addEventListener('input', updateCompletion);
+    form.addEventListener('change', updateCompletion);
+    updateCompletion();
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const serviceType = document.getElementById('serviceType').value;
+
+      let valid = true;
+      ['name','email','serviceType'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) {
+          el.classList.add('error');
+          setTimeout(() => el.classList.remove('error'), 1500);
+          valid = false;
+        }
+      });
+      if (!valid) return;
+
+      const phone = document.getElementById('phone').value.trim();
+      const company = document.getElementById('company').value.trim();
+      const overall = document.querySelector('input[name="overall"]:checked')?.value || 'Not rated';
+      const communication = document.querySelector('input[name="communication"]:checked')?.value || 'Not rated';
+      const design = document.querySelector('input[name="design"]:checked')?.value || 'Not rated';
+      const speed = document.querySelector('input[name="speed"]:checked')?.value || 'Not rated';
+      const again = document.querySelector('input[name="again"]:checked')?.value || 'Not answered';
+      const refer = document.querySelector('input[name="refer"]:checked')?.value || 'Not answered';
+      const liked = document.getElementById('liked').value.trim();
+      const improve = document.getElementById('improve').value.trim();
+      const other = document.getElementById('other').value.trim();
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+      submitNote.innerHTML = 'Sending securely to my inbox.<br>Please wait a moment.';
+
+      fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          company,
+          serviceType,
+          ratings: { overall, communication, design, speed },
+          again,
+          refer,
+          liked,
+          improve,
+          other
+        })
+      })
+      .then(async (response) => {
+        if (!response.ok) {
+          const data = await response.json().catch(() => ({}));
+          throw new Error(data.error || 'Unable to send feedback right now.');
+        }
+        document.getElementById('feedbackForm').style.display = 'none';
+        document.getElementById('successMsg').style.display = 'block';
+        progressFill.style.width = '100%';
+        progressLabel.textContent = '100%';
+      })
+      .catch((error) => {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Feedback ->';
+        submitNote.textContent = error.message;
+      });
+    }
+  </script>
+
+</body>
+</html>

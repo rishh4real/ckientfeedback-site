@@ -1,0 +1,13 @@
+{
+  "name": "ckientfeedback-site",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npx vercel dev",
+    "start": "npx vercel dev"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "nodemailer": "^9.0.1"
+  }
+}
