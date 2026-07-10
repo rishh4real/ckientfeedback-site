@@ -1,5 +1,4 @@
 const nodemailer = require('nodemailer');
-const { createClient } = require('@supabase/supabase-js');
 
 const REQUIRED_FIELDS = ['name', 'email', 'serviceType'];
 
@@ -118,36 +117,39 @@ function feedbackHtml(data, heading = 'New Client Feedback') {
 }
 
 async function saveFeedbackToSupabase(data) {
-  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseUrl = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
 
   if (!supabaseUrl || !supabaseKey) {
     throw new Error('Supabase is not configured yet. Add SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in Vercel environment variables.');
   }
 
-  const supabase = createClient(supabaseUrl, supabaseKey, {
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false
-    }
+  const response = await fetch(`${supabaseUrl}/rest/v1/feedback_responses`, {
+    method: 'POST',
+    headers: {
+      apikey: supabaseKey,
+      Authorization: `Bearer ${supabaseKey}`,
+      'Content-Type': 'application/json',
+      Prefer: 'return=minimal'
+    },
+    body: JSON.stringify({
+      name: clean(data.name, ''),
+      email: clean(data.email, ''),
+      phone: clean(data.phone, ''),
+      company: clean(data.company, ''),
+      service_type: clean(data.serviceType, ''),
+      ratings: data.ratings || {},
+      again: clean(data.again, ''),
+      refer: clean(data.refer, ''),
+      liked: clean(data.liked, ''),
+      improve: clean(data.improve, ''),
+      other: clean(data.other, '')
+    })
   });
 
-  const { error } = await supabase.from('feedback_responses').insert({
-    name: clean(data.name, ''),
-    email: clean(data.email, ''),
-    phone: clean(data.phone, ''),
-    company: clean(data.company, ''),
-    service_type: clean(data.serviceType, ''),
-    ratings: data.ratings || {},
-    again: clean(data.again, ''),
-    refer: clean(data.refer, ''),
-    liked: clean(data.liked, ''),
-    improve: clean(data.improve, ''),
-    other: clean(data.other, '')
-  });
-
-  if (error) {
-    throw new Error(`Supabase insert failed: ${error.message}`);
+  if (!response.ok) {
+    const message = await response.text();
+    throw new Error(`Supabase insert failed: ${message || response.statusText}`);
   }
 }
 
