@@ -1128,6 +1128,7 @@
           }
           throw new Error(message);
         }
+        await response.json().catch(() => ({}));
         document.getElementById('feedbackForm').style.display = 'none';
         document.getElementById('successMsg').style.display = 'block';
         progressFill.style.width = '100%';

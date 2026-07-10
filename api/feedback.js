@@ -40,6 +40,17 @@ function normalizeSupabaseUrl(value = '') {
   return `https://${trimmed}.supabase.co`;
 }
 
+function shortErrorMessage(error) {
+  const message = String(error?.message || error || 'Unable to send feedback right now.');
+  if (message.includes('521') || message.includes('Web server is down')) {
+    return 'Supabase is still waking up. Your email was sent, but database saving may take another minute.';
+  }
+  if (message.length > 220) {
+    return `${message.slice(0, 220)}...`;
+  }
+  return message;
+}
+
 function feedbackText(data) {
   const ratings = data.ratings || {};
   return `CLIENT FEEDBACK - SHAURYA SHARMA
@@ -210,8 +221,6 @@ module.exports = async function handler(req, res) {
     const subject = `Client Feedback from ${clean(data.name)} - ${clean(data.serviceType)}`;
     const text = feedbackText(data);
 
-    await saveFeedbackToSupabase(data);
-
     await transporter.sendMail({
       from: `"${fromName}" <${smtpUser}>`,
       to,
@@ -229,10 +238,20 @@ module.exports = async function handler(req, res) {
       html: feedbackHtml(data, 'Your Feedback Copy')
     });
 
+    try {
+      await saveFeedbackToSupabase(data);
+    } catch (supabaseError) {
+      console.error('Supabase save failed:', supabaseError);
+      return res.status(200).json({
+        ok: true,
+        warning: shortErrorMessage(supabaseError)
+      });
+    }
+
     return res.status(200).json({ ok: true });
   } catch (error) {
     return res.status(500).json({
-      error: error.message || 'Unable to send feedback right now.'
+      error: shortErrorMessage(error)
     });
   }
 };
