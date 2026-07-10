@@ -1118,8 +1118,15 @@
       })
       .then(async (response) => {
         if (!response.ok) {
-          const data = await response.json().catch(() => ({}));
-          throw new Error(data.error || 'Unable to send feedback right now.');
+          const raw = await response.text();
+          let message = 'Unable to send feedback right now.';
+          try {
+            const data = JSON.parse(raw);
+            message = data.error || message;
+          } catch {
+            if (raw) message = raw.replace(/\s+/g, ' ').trim();
+          }
+          throw new Error(message);
         }
         document.getElementById('feedbackForm').style.display = 'none';
         document.getElementById('successMsg').style.display = 'block';
