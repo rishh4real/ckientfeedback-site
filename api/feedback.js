@@ -163,57 +163,63 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Only POST requests are allowed.' });
   }
 
-  const data = normalizeBody(req.body);
-  const missing = REQUIRED_FIELDS.filter((field) => !clean(data[field], ''));
+  try {
+    const data = normalizeBody(req.body);
+    const missing = REQUIRED_FIELDS.filter((field) => !clean(data[field], ''));
 
-  if (missing.length > 0 || !isEmail(data.email)) {
-    return res.status(400).json({ error: 'Please enter your name, valid email, and service type.' });
-  }
+    if (missing.length > 0 || !isEmail(data.email)) {
+      return res.status(400).json({ error: 'Please enter your name, valid email, and service type.' });
+    }
 
-  const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
-  const smtpPort = Number(process.env.SMTP_PORT || 465);
-  const smtpUser = process.env.SMTP_USER;
-  const smtpPass = process.env.SMTP_PASS;
-  const to = process.env.FEEDBACK_TO || 'rishh4work@gmail.com';
-  const fromName = process.env.FEEDBACK_FROM_NAME || 'Shaurya Feedback Form';
+    const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
+    const smtpPort = Number(process.env.SMTP_PORT || 465);
+    const smtpUser = process.env.SMTP_USER;
+    const smtpPass = process.env.SMTP_PASS;
+    const to = process.env.FEEDBACK_TO || 'rishh4work@gmail.com';
+    const fromName = process.env.FEEDBACK_FROM_NAME || 'Shaurya Feedback Form';
 
-  if (!smtpUser || !smtpPass) {
+    if (!smtpUser || !smtpPass) {
+      return res.status(500).json({
+        error: 'Email backend is not configured yet. Add SMTP_USER and SMTP_PASS in Vercel environment variables.'
+      });
+    }
+
+    const transporter = nodemailer.createTransport({
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpPort === 465,
+      auth: {
+        user: smtpUser,
+        pass: smtpPass
+      }
+    });
+
+    const subject = `Client Feedback from ${clean(data.name)} - ${clean(data.serviceType)}`;
+    const text = feedbackText(data);
+
+    await saveFeedbackToSupabase(data);
+
+    await transporter.sendMail({
+      from: `"${fromName}" <${smtpUser}>`,
+      to,
+      replyTo: data.email,
+      subject,
+      text,
+      html: feedbackHtml(data)
+    });
+
+    await transporter.sendMail({
+      from: `"${fromName}" <${smtpUser}>`,
+      to: data.email,
+      subject: 'Copy of your feedback for Shaurya Sharma',
+      text: `Thank you for sharing your feedback. Here is a copy of your response.\n\n${text}`,
+      html: feedbackHtml(data, 'Your Feedback Copy')
+    });
+
+    return res.status(200).json({ ok: true });
+  } catch (error) {
     return res.status(500).json({
-      error: 'Email backend is not configured yet. Add SMTP_USER and SMTP_PASS in Vercel environment variables.'
+      error: error.message || 'Unable to send feedback right now.'
     });
   }
-
-  const transporter = nodemailer.createTransport({
-    host: smtpHost,
-    port: smtpPort,
-    secure: smtpPort === 465,
-    auth: {
-      user: smtpUser,
-      pass: smtpPass
-    }
-  });
-
-  const subject = `Client Feedback from ${clean(data.name)} - ${clean(data.serviceType)}`;
-  const text = feedbackText(data);
-
-  await saveFeedbackToSupabase(data);
-
-  await transporter.sendMail({
-    from: `"${fromName}" <${smtpUser}>`,
-    to,
-    replyTo: data.email,
-    subject,
-    text,
-    html: feedbackHtml(data)
-  });
-
-  await transporter.sendMail({
-    from: `"${fromName}" <${smtpUser}>`,
-    to: data.email,
-    subject: 'Copy of your feedback for Shaurya Sharma',
-    text: `Thank you for sharing your feedback. Here is a copy of your response.\n\n${text}`,
-    html: feedbackHtml(data, 'Your Feedback Copy')
-  });
-
-  return res.status(200).json({ ok: true });
 };
